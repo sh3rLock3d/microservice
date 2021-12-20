@@ -53,8 +53,24 @@ def dr_get_profile(request):
 # {idDr, NationalIDPationt, [...drugllist], comment} return {done}
 @csrf_exempt
 def dr_addPrescription(request):
-    # check if pationt exists
-    return JsonResponse({'message':'done'})
+    json_data = json.loads(request.body)   
+    if json_data.get('idDr') == None:
+        return JsonResponse({'message':'insert idDr'})    
+    if json_data.get('NationalIDPationt') == None:
+        return JsonResponse({'message':'insert NationalIDPationt'})    
+    if json_data.get('drugllist') == None:
+        return JsonResponse({'message':'insert drugllist'})    
+    if json_data.get('comment') == None:
+        return JsonResponse({'message':'insert comment'})    
+    r = requests.post(USERS + "doExist", data=json.dumps({"p":json_data.get('NationalIDPationt'), "d":json_data.get('idDr')})) 
+    a = r.json()
+    if a.get('m') == False:
+        return JsonResponse({"error":a.get('error')})    
+    
+    r = requests.post(PRESCRIPT + "dr/addPrescription", data=json.dumps(json_data)) 
+    a = r.json()
+    
+    return JsonResponse(a)
 
 ################
 

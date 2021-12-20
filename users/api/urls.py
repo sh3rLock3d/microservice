@@ -14,6 +14,7 @@ urlpatterns = [
     
     path('a/login', views.admin_login, name='admin_login'),
     path('a/getProfile', views.admin_getProfile, name='admin_getProfile'),
+    path('doExist', views.doExist, name='doExist'),
     
     
 ]

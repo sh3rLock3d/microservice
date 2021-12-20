@@ -106,3 +106,21 @@ def admin_getProfile(request):
         return JsonResponse({"name":"admin", "nationalCode":"a123456789"})
     else:
         return JsonResponse({'error':"id doesn't exist"})
+
+@csrf_exempt
+def doExist(request):
+    json_data = json.loads(request.body)
+    p = json_data.get('p')
+    d = json_data.get('d')
+    
+    try:
+        a = Patient.objects.get(nationalCode=p)
+    except Exception as e:
+        return JsonResponse({'m':False, "error":"patient doesnt exist"})
+    
+    try:
+        a = Doctor.objects.get(id=d)
+    except Exception as e:
+        return JsonResponse({'m':False, "error":"doctor doesnt exist"})
+    
+    return JsonResponse({'m':True})
