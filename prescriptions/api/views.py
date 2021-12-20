@@ -22,6 +22,7 @@ def dr_addPrescription(request):
     a = Prescript(idDr=idDr, NationalIDPationt=NationalIDPationt,drugllist=','.join(drugllist), comment=comment)
     return JsonResponse({'foo':'barrr'})
 
+
 @csrf_exempt 
 def p_listpres(request):
     return JsonResponse({'foo':'bar'})
@@ -29,4 +30,3 @@ def p_listpres(request):
 @csrf_exempt 
 def admin_getstatistics(request):
     return JsonResponse({'foo':'bar'})
-
