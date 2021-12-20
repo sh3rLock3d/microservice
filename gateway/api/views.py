@@ -112,15 +112,33 @@ def p_get_profile(request):
 
 # {id} return {[...,list of prescript], [..., list of drs]}
 def p_listpres(request):
-    return JsonResponse({'message':'done'})
-
+    json_data = json.loads(request.body)   
+    r = requests.post(USERS + "doExist", data=json.dumps({"p":json_data.get('id'), "d":1})) 
+    a = r.json()
+    if a.get('m') == False:
+        return JsonResponse({"error":a.get('error')})    
+    r = requests.post(PRESCRIPT + "p/listpres", data=json.dumps(json_data)) 
+    a = r.json()
+    return JsonResponse(a)
+    
 def admin_login(request):
-    return JsonResponse({'message':'done'})
+    json_data = json.loads(request.body)   
+    r = requests.post(USERS + "a/login", data=json.dumps(json_data)) 
+    a = r.json()
+    return JsonResponse(a)
 
 
 def admin_getProfile(request):
-    return JsonResponse({'message':'done'})
+    json_data = json.loads(request.body)   
+    r = requests.post(USERS + "a/getProfile", data=json.dumps(json_data)) 
+    a = r.json()
+    return JsonResponse(a)
 
-
+# return {totalPres, totalPatient, totalDr}
 def admin_getstatistics(request):
-    return JsonResponse({'message':'done'})
+    r = requests.post(USERS + "a/stat", ) 
+    a = r.json()
+    r = requests.post(PRESCRIPT + "a/stat",) 
+    b = r.json()
+    a.update(b)
+    return JsonResponse({'message':a})

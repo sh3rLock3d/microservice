@@ -20,13 +20,27 @@ def dr_addPrescription(request):
     comment = json_data.get('comment')
     print(','.join(drugllist))
     a = Prescript(idDr=idDr, NationalIDPationt=NationalIDPationt,drugllist=','.join(drugllist), comment=comment)
-    return JsonResponse({'foo':'barrr'})
+    a.save()
+    return JsonResponse({"message":"done"})
 
 
 @csrf_exempt 
 def p_listpres(request):
-    return JsonResponse({'foo':'bar'})
+    json_data = json.loads(request.body)   
+    id = json_data.get('id')
+    a = Prescript.objects.filter(NationalIDPationt=id)
+    res = []
+    for i in a:
+        res.append({
+            "idDr":i.idDr,
+            "drugllist":i.drugllist.split(','),
+            "comment":i.comment
+        }
+        )
+    return JsonResponse({'message':res})
 
 @csrf_exempt 
 def admin_getstatistics(request):
-    return JsonResponse({'foo':'bar'})
+    return JsonResponse({
+        "totalPrescript":Prescript.objects.count()
+    })

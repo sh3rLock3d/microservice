@@ -98,10 +98,10 @@ def admin_login(request):
     else:
         return JsonResponse({'error':'password is incorrect'})
 
-
+@csrf_exempt
 def admin_getProfile(request):    
     json_data = json.loads(request.body)
-    password = json_data.get('password')
+    id = json_data.get('id')
     if id == "1":
         return JsonResponse({"name":"admin", "nationalCode":"a123456789"})
     else:
@@ -124,3 +124,10 @@ def doExist(request):
         return JsonResponse({'m':False, "error":"doctor doesnt exist"})
     
     return JsonResponse({'m':True})
+
+@csrf_exempt
+def  stat(request):
+    return JsonResponse({
+        'totalDr':Doctor.objects.count(),
+        "totalPatient":Patient.objects.count()
+    })
